@@ -29,14 +29,12 @@ public class SqliteTaskRepository : ITaskRepository
 
         if (!string.IsNullOrEmpty(status))
         {
-            var statusEnum = Enum.Parse<TaskItemStatus>(status, ignoreCase: true);
-            query = query.Where(t => t.Status == statusEnum);
+            query = query.Where(t => t.Status == status);
         }
 
         if (!string.IsNullOrEmpty(priority))
         {
-            var priorityEnum = Enum.Parse<TaskItemPriority>(priority, ignoreCase: true);
-            query = query.Where(t => t.Priority == priorityEnum);
+            query = query.Where(t => t.Priority == priority);
         }
 
         if (!string.IsNullOrEmpty(search))

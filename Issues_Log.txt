@@ -1,0 +1,49 @@
+==================================================
+Exception #1
+Date: 23/06/2026
+Feature: Update Task
+Endpoint: PATCH /api/v1/tasks/{id}
+
+Action:
+Updating a task status from "todo" to "in_progress".
+
+Request:
+`{"status": "in_progress"}`
+
+
+Exception:
+System.ArgumentException:
+Requested value 'in_progress' was not found.
+
+Cause:
+The API contract uses `snake_case` strings (`"in_progress"`) for status values, but the C# enum member is named in `PascalCase` (`InProgress`). `Enum.Parse<TaskStatus>("in_progress")` has no member named `in_progress`, so it throws an ArgumentException instead of matching `InProgress`.
+
+This exception was not caught anywhere, so it bubbled up to the global exception handler and returned a generic `500 INTERNAL_ERROR` instead of a useful message — masking the real problem.
+
+Fix:
+Removed TaskStatus and TaskPriority enums and changed
+Status and Priority back to string properties.
+
+Added validation to allow only:
+(private static readonly string[] ValidStatuses = ["todo", "in_progress", "done"];)
+- todo
+- in_progress
+- done
+
+With plain strings, there is no enum/string mismatch possible, so this class of bug cannot recur.
+
+Also updated:
+- TaskItem.cs
+- TaskService.cs
+- TaskValidator.cs
+- AppDbContext.cs
+- SqliteTaskRepository.cs
+
+Created migration:
+RevertToStringStatusPriority
+
+Result:
+PATCH request now updates the task successfully without
+throwing an exception.
+
+==================================================

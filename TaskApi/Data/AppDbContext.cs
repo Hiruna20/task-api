@@ -16,17 +16,8 @@ public class AppDbContext : DbContext
             entity.HasKey(t => t.Id);
             entity.Property(t => t.Title).IsRequired().HasMaxLength(120);
             entity.Property(t => t.Description).HasMaxLength(1000);
-
-            entity.Property(t => t.Status).IsRequired()
-                .HasConversion(
-                    v => v.ToString().ToLower(),
-                    v => Enum.Parse<TaskItemStatus>(v, ignoreCase: true)
-                );
-            entity.Property(t => t.Priority).IsRequired()
-                .HasConversion(
-                    v => v.ToString().ToLower(),
-                    v => Enum.Parse<TaskItemPriority>(v, ignoreCase: true)
-                );
+            entity.Property(t => t.Status).IsRequired();
+            entity.Property(t => t.Priority).IsRequired();
         });
     }
 }

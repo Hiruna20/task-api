@@ -20,10 +20,8 @@ public class TaskServices : ITaskService
             Id = $"task_{Guid.NewGuid():N}",
             Title = request.Title!.Trim(),
             Description = request.Description?.Trim(),
-            Status = TaskItemStatus.Todo,
-            Priority = request.Priority is not null
-                ? Enum.Parse<TaskItemPriority>(request.Priority, ignoreCase: true)
-                : TaskItemPriority.Medium,
+            Status = "todo",
+            Priority = request.Priority?.Trim().ToLower()??"Medium",
             DueDate = request.DueDate,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
@@ -62,10 +60,10 @@ public class TaskServices : ITaskService
             task.Description = request.Description.Trim();
 
         if (request.Status is not null)
-            task.Status = Enum.Parse<TaskItemStatus>(request.Status, ignoreCase: true);
+            task.Status = request.Status.Trim().ToLower();
 
         if (request.Priority is not null)
-            task.Priority = Enum.Parse<TaskItemPriority>(request.Priority, ignoreCase: true);
+            task.Priority = request.Priority.Trim().ToLower();
 
         if (request.DueDate is not null)
             task.DueDate = request.DueDate;
@@ -86,8 +84,8 @@ public class TaskServices : ITaskService
         Id = task.Id,
         Title = task.Title,
         Description = task.Description,
-        Status = task.Status.ToString().ToLower(),
-        Priority = task.Priority.ToString().ToLower(),
+        Status = task.Status,
+        Priority = task.Priority,
         DueDate = task.DueDate,
         CreatedAt = task.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ"),
         UpdatedAt = task.UpdatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ")
