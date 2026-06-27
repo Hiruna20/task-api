@@ -21,7 +21,7 @@ public class TaskServices : ITaskService
             Title = request.Title!.Trim(),
             Description = request.Description?.Trim(),
             Status = "todo",
-            Priority = request.Priority?.Trim().ToLower()??"Medium",
+            Priority = request.Priority?.Trim().ToLower()??"medium",
             DueDate = request.DueDate,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
